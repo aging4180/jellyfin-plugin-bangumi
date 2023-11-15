@@ -20,16 +20,8 @@ jobs:
     - name: Build DLL
       run: msbuild Jellyfin.Plugin.Bangumi.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-    - name: show
-      run: tree /f
-
-    - name: Copy DLL to artifact directory
-      run: Copy-Item -Path .\bin\Release\*.dll -Destination $env:GITHUB_WORKSPACE\artifacts\
-
-
-
     - name: Upload DLL artifact
       uses: actions/upload-artifact@v2
       with:
         name: my-dll
-        path: $GITHUB_WORKSPACE/artifacts
+        path: Jellyfin.Plugin.Bangumi/bin/Release/net6.0
