@@ -13,6 +13,9 @@ jobs:
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
+      
+    - name: Restore NuGet packages
+      run: nuget restore Jellyfin.Plugin.Bangumi.sln
 
     - name: Build DLL
       run: msbuild Jellyfin.Plugin.Bangumi.sln /p:Configuration=Release /p:Platform="Any CPU"
@@ -20,8 +23,13 @@ jobs:
     - name: show
       run: tree /f
 
-    # - name: Upload DLL artifact
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: my-dll
-    #     path: path/to/your/dll
+    - name: Copy DLL to artifact directory
+      run: Copy-Item -Path .\bin\Release\*.dll -Destination $env:GITHUB_WORKSPACE\artifacts\
+
+
+
+    - name: Upload DLL artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-dll
+        path: $GITHUB_WORKSPACE/artifacts
