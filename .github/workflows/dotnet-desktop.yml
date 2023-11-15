@@ -20,8 +20,14 @@ jobs:
     - name: Build DLL
       run: msbuild Jellyfin.Plugin.Bangumi.sln /p:Configuration=Release /p:Platform="Any CPU"
 
-    - name: Upload DLL artifact
-      uses: actions/upload-artifact@v2
+    - name: Upload Jellyfin
+      uses: actions/upload-artifact@v3
       with:
-        name: my-dll
-        path: Jellyfin.Plugin.Bangumi/bin/Release/net6.0
+        name: Jellyfin.Plugin.Bangumi
+        path: Jellyfin.Plugin.Bangumi/bin/Release/net6.0/*.dll
+        
+    - name: Upload Emby
+      uses: actions/upload-artifact@v3
+      with:
+        name: Emby.Plugin.Bangumi
+        path: Emby.Plugin.Bangumi/bin/Release/net6.0/*.dll
