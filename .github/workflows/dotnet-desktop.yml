@@ -6,16 +6,19 @@ on: [workflow_dispatch]
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
     - name: Set up MSBuild
       uses: microsoft/setup-msbuild@v1
-      
+
     - name: Restore NuGet packages
       run: nuget restore Jellyfin.Plugin.Bangumi.sln
+
+    - name: test
+      run: dotnet test --configuration release -l "console;verbosity=detailed"
 
     - name: Build DLL
       run: msbuild Jellyfin.Plugin.Bangumi.sln /p:Configuration=Release /p:Platform="Any CPU"
@@ -25,7 +28,7 @@ jobs:
       with:
         name: Jellyfin.Plugin.Bangumi
         path: Jellyfin.Plugin.Bangumi/bin/Release/net6.0/*.dll
-        
+
     - name: Upload Emby
       uses: actions/upload-artifact@v3
       with:
