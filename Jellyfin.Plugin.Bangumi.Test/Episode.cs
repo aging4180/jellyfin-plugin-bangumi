@@ -48,6 +48,32 @@ public class Episode
 
         episodeData = await _provider.GetMetadata(new EpisodeInfo
         {
+            Path = FakePath.CreateFile("[200507]草莓棉花糖/[200702]草莓棉花糖 OVA 第1期 BD/Ichigo Mashimaro OVA - 03.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "693"
+                }
+            }
+        }, _token);
+        Assert.AreEqual("まいにち。", episodeData.Item.Name, "should return the right episode title");
+        Assert.AreEqual(1, episodeData.Item.ParentIndexNumber, "should return the right episode title");
+
+        episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
+            Path = FakePath.CreateFile("anime/[202307]庙不可言/[202307]庙不可言 BD/Tenpuru - SP02.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "416019"
+                }
+            }
+        }, _token);
+        Assert.AreEqual("そんなところを触られては…", episodeData.Item.Name, "should return the right episode title");
+        Assert.AreEqual(0, episodeData.Item.ParentIndexNumber, "should return the right episode title");
+
+        episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
             IndexNumber = 0,
             Path = FakePath.CreateFile("ONE PIECE/海贼王--S21--E1023.MP4"),
             SeriesProviderIds = new Dictionary<string, string>

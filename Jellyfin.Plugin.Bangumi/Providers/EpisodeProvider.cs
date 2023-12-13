@@ -99,7 +99,7 @@ public class EpisodeProvider : IRemoteMetadataProvider<Episode, EpisodeInfo>, IH
         result.Item.ParentIndexNumber = info.ParentIndexNumber ?? 1;
 
         var parent = _libraryManager.FindByPath(Path.GetDirectoryName(info.Path), true);
-        if (IsSpecial(info.Path, false) || episode.Type == EpisodeType.Special || info.ParentIndexNumber == 0)
+        if (episode.Type == EpisodeType.Special)
         {
             result.Item.ParentIndexNumber = 0;
         }
