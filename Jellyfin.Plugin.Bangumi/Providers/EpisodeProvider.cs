@@ -41,6 +41,8 @@ public class EpisodeProvider : IRemoteMetadataProvider<Episode, EpisodeInfo>, IH
         new(@"(\d{2,})")
     };
 
+    private static readonly Regex EpisodeRangeFileNameRegex = new(@"(\d{2,})(-|\+)(\d{2,})");
+
     private static readonly Regex OpeningEpisodeFileNameRegex = new(@"(NC)?OP([^a-zA-Z]|$)");
     private static readonly Regex EndingEpisodeFileNameRegex = new(@"(NC)?ED([^a-zA-Z]|$)");
     private static readonly Regex SpecialEpisodeFileNameRegex = new(@"(SPs?|Specials?|OVA|OAD)([^a-zA-Z]|$)");
@@ -107,6 +109,14 @@ public class EpisodeProvider : IRemoteMetadataProvider<Episode, EpisodeInfo>, IH
         {
             result.Item.SeasonId = season.Id;
             result.Item.ParentIndexNumber = season.IndexNumber;
+        }
+
+        if (int.TryParse(EpisodeRangeFileNameRegex.Match(Path.GetFileName(info.Path)).Groups[3].Value.Trim('.'), out var indexEnd) && int.TryParse(EpisodeRangeFileNameRegex.Match(Path.GetFileName(info.Path)).Groups[1].Value.Trim('.'), out var index))
+        {
+            if (index == result.Item.IndexNumber && indexEnd > result.Item.IndexNumber)
+            {
+                result.Item.IndexNumberEnd = indexEnd;
+            }
         }
 
         if (episode.Type == EpisodeType.Normal && result.Item.ParentIndexNumber > 0)
@@ -206,7 +216,7 @@ public class EpisodeProvider : IRemoteMetadataProvider<Episode, EpisodeInfo>, IH
                 return episode;
         }
 
-        SkipBangumiId:
+    SkipBangumiId:
         var episodeListData = await _api.GetSubjectEpisodeList(seriesId, type, episodeIndex.Value, token);
         if (episodeListData == null)
             return null;

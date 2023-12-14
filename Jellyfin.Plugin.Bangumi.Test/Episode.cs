@@ -16,6 +16,82 @@ public class Episode
 
     private readonly CancellationToken _token = new();
 
+
+    [TestMethod]
+    public async Task Temp()
+    {
+        var episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
+            Path = FakePath.CreateFile("anime/[202307]庙不可言/[202307]庙不可言 BD/Tenpuru - 02-04.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "416019"
+                }
+            }
+        }, _token);
+        Assert.IsNotNull(episodeData, "episode data should not be null");
+        Assert.IsNotNull(episodeData.Item, "episode data should not be null");
+        Assert.AreEqual("えっちなのって悪いことじゃないよ？", episodeData.Item.Name, "should return the right episode title");
+        Assert.AreEqual(1, episodeData.Item.ParentIndexNumber, "should return the right episode title");
+        Assert.AreEqual(2, episodeData.Item.IndexNumber, "should return the right episode title");
+        Assert.AreEqual(4, episodeData.Item.IndexNumberEnd, "should return the right episode title");
+
+        episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
+            Path = FakePath.CreateFile("anime/[202307]庙不可言/[202307]庙不可言 BD/Tenpuru - 02.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "416019"
+                }
+            }
+        }, _token);
+        Assert.IsNotNull(episodeData, "episode data should not be null");
+        Assert.IsNotNull(episodeData.Item, "episode data should not be null");
+        Assert.AreEqual("えっちなのって悪いことじゃないよ？", episodeData.Item.Name, "error");
+        Assert.AreEqual(1, episodeData.Item.ParentIndexNumber, "error");
+        Assert.AreEqual(2, episodeData.Item.IndexNumber, "error");
+        Assert.AreEqual(null, episodeData.Item.IndexNumberEnd, "error");
+
+
+        episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
+            Path = FakePath.CreateFile("anime/[202307]庙不可言/[202307]庙不可言 BD/Tenpuru - 02-01.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "416019"
+                }
+            }
+        }, _token);
+        Assert.IsNotNull(episodeData, "episode data should not be null");
+        Assert.IsNotNull(episodeData.Item, "episode data should not be null");
+        Assert.AreEqual("えっちなのって悪いことじゃないよ？", episodeData.Item.Name, "error");
+        Assert.AreEqual(1, episodeData.Item.ParentIndexNumber, "error");
+        Assert.AreEqual(2, episodeData.Item.IndexNumber, "error");
+        Assert.AreEqual(null, episodeData.Item.IndexNumberEnd, "error");
+
+        episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
+            Path = FakePath.CreateFile("anime/[202307]庙不可言/[202307]庙不可言 BD/Tenpuru - 02+03.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "416019"
+                }
+            }
+        }, _token);
+        Assert.IsNotNull(episodeData, "episode data should not be null");
+        Assert.IsNotNull(episodeData.Item, "episode data should not be null");
+        Assert.AreEqual("えっちなのって悪いことじゃないよ？", episodeData.Item.Name, "error");
+        Assert.AreEqual(1, episodeData.Item.ParentIndexNumber, "error");
+        Assert.AreEqual(2, episodeData.Item.IndexNumber, "error");
+        Assert.AreEqual(3, episodeData.Item.IndexNumberEnd, "error");
+
+    }
+
+
     [TestMethod]
     public void ProviderInfo()
     {
