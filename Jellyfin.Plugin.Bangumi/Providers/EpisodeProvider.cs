@@ -162,7 +162,7 @@ public class EpisodeProvider : IRemoteMetadataProvider<Episode, EpisodeInfo>, IH
         if (string.IsNullOrEmpty(fileName))
             return null;
 
-        var type = IsSpecial(info.Path) ? EpisodeType.Special : GuessEpisodeTypeFromFileName(fileName);
+        var type = IsSpecial(info.Path, false) ? EpisodeType.Special : GuessEpisodeTypeFromFileName(fileName);
         var seriesId = localConfiguration.Id;
 
         var parent = _libraryManager.FindByPath(Path.GetDirectoryName(info.Path), true);

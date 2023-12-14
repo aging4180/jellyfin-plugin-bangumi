@@ -134,6 +134,23 @@ public class Episode
         Assert.IsNotNull(episodeData, "episode data should not be null");
         Assert.IsNotNull(episodeData.Item, "episode data should not be null");
         Assert.AreEqual(1, episodeData.Item.IndexNumber, "should fix episode index automatically");
+
+
+        episodeData = await _provider.GetMetadata(new EpisodeInfo
+        {
+            Path = FakePath.CreateFile("anime/[202307]庙不可言/[202307]庙不可言 OVA/Tenpuru - 02.mkv"),
+            SeriesProviderIds = new Dictionary<string, string>
+            {
+                {
+                    Constants.ProviderName, "416019"
+                }
+            }
+        }, _token);
+        Assert.IsNotNull(episodeData, "episode data should not be null");
+        Assert.IsNotNull(episodeData.Item, "episode data should not be null");
+        Assert.AreEqual("えっちなのって悪いことじゃないよ？", episodeData.Item.Name, "should return the right episode title");
+        Assert.AreEqual(1, episodeData.Item.ParentIndexNumber, "should return the right episode title");
+
     }
 
     [TestMethod]
